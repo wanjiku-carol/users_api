@@ -1,10 +1,13 @@
-from flask import Flask, request, jsonify
 import requests
+from flask import Flask, jsonify, request
+from flask_caching import Cache 
 
 app = Flask(__name__)
-
+app.config.from_object('config.Config')  # Set the configuration variables to the flask application
+cache = Cache(app) 
 
 @app.route("/users")
+@cache.cached(timeout=30, query_string=True)
 def get_users():
     API_URL = "http://anapi"
     r = requests.get(f"{API_URL}")
@@ -12,6 +15,7 @@ def get_users():
 
 
 @app.route("/users/{id}")
+@cache.cached(timeout=30, query_string=True)
 def get_user(id):
     API_URL = "http://anapi/search?eg="
     user_id = request.args.get('id')
