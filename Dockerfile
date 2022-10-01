@@ -1,8 +1,8 @@
 FROM python:3.8.7-slim-buster
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY requirements.txt /app
+COPY requirements.txt ./
 
 RUN python -m venv venv
 
@@ -12,4 +12,6 @@ RUN pip3 install -r requirements.txt --no-cache-dir
 
 COPY . .
 
-CMD python app.py
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
