@@ -254,5 +254,8 @@ cython_debug/
 
 *.rdb
 
-# End of https://www.toptal.com/developers/gitignore/api/python,flask,redis
+# docker postgres data
 *postgres-data
+
+#migrations
+*migrations

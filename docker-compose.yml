@@ -10,11 +10,13 @@ services:
       - .env
     ports:
       - '8000:8000'
+  
   redis:
     image: redis
     container_name: redis-container
     ports:
       - "6379:6379"
+  
   postgres:
     restart: always
     image: postgres:10
@@ -26,6 +28,7 @@ services:
       - ./postgres-data/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  
   app:
     restart: always
     build: .

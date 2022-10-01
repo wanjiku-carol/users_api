@@ -1,39 +1,40 @@
 import os
 import requests
+
+from os.path import join, dirname
+from dotenv import load_dotenv
+
 from flask import Flask, jsonify, request
-from flask_caching import Cache 
+# from flask_caching import Cache 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 # app = Flask(__name__)
 # app.config.from_object('config.Config')  # Set the configuration variables to the flask application
 # cache = Cache(app) 
-db = SQLAlchemy()
-migrate = Migrate()
-cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
+app = Flask(__name__)
+app.config.from_pyfile('config.py') 
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+# cache = Cache(app, config={'CACHE_TYPE': os.environ.get('CACHE_TYPE')})
 
 def create_app():
-    app = Flask(__name__)
-    
-    # app.config.from_pyfile('config.py')
-    
     app.config.from_mapping(
         SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev_key',
         SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL'),
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
-     
-    cache.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
-    
     return app
 
 app = create_app()
 
 @app.route("/users", methods=["GET"])
-@cache.cached(timeout=30, query_string=True)
+# @cache.cached(timeout=30, query_string=True)
 def get_users():
     API_URL = "http://anapi"
     r = requests.get(f"{API_URL}")
@@ -41,7 +42,7 @@ def get_users():
 
 
 @app.route("/users/<string:id>")
-@cache.cached(timeout=30, query_string=True)
+# @cache.cached(timeout=30, query_string=True)
 def get_user(id):
     API_URL = "http://anapi/search?eg="
     user_id = request.args.get('id')
