@@ -5,7 +5,7 @@ services:
   api:
     container_name: flask-container
     build: .
-    entrypoint: python app.py
+    entrypoint: flask run
     env_file:
       - .env
     ports:

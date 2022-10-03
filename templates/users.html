@@ -1,0 +1,8 @@
+{% extends '/layout.html' %} {% block content %} {% for uer in users %}
+<ul id="user.name">
+    <li>Name: {{ user.name }} </li>
+    <li>Email: {{ user.email }} </li>
+    <li>Website: {{ user.website }} </li>
+    <li>Admin: {{ user.admin }} </li>
+</ul>
+{% endfor %} {% endblock %}
